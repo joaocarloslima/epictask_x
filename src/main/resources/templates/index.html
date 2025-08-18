@@ -9,9 +9,26 @@
 </head>
 <body>
 
-<h1 class="text-primary text-2xl font-bold p-4">EpicTask</h1>
+<nav class="navbar bg-base-300 shadow-sm">
+    <div class="flex-1">
+        <a class="btn btn-ghost text-xl">Epic Task</a>
+    </div>
+    <div class="flex-none">
+        <ul class="menu menu-horizontal px-1">
+            <li>
+                <details>
+                    <summary>🌎</summary>
+                    <ul class="bg-base-100 rounded-t-none p-2">
+                        <li><a href="?lang=pt_BR">🇧🇷</a></li>
+                        <li><a href="?lang=en_US">🏴󠁧󠁢󠁥󠁮󠁧󠁿</a></li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<a href="/task/form" class="btn btn-primary m-4">Nova Tarefa</a>
+<a href="/task/form" class="btn btn-primary m-4" th:text="#{task.new}"></a>
 
 <div th:if="${message}" role="alert" class="alert alert-success alert-soft m-4">
     <span th:text="${message}"></span>
@@ -28,7 +45,7 @@
         </div>
 
         <div class="justify-end card-actions m-4">
-            <button class="btn btn-primary btn-soft">apagar</button>
+            <button class="btn btn-primary btn-soft" th:text="#{delete}"></button>
         </div>
     </div>
 </main>
