@@ -12,7 +12,7 @@
 <h1 class="text-primary text-2xl font-bold">EpicTask</h1>
 
 <main class="grid place-items-center">
-   <form class="w-full max-w-md" method="POST" th:object="${task}">
+   <form class="w-full max-w-md" method="POST" th:object="${task}" th:action="${'/task/form'}">
        <fieldset class="fieldset">
            <legend class="fieldset-legend" th:text="#{title}"></legend>
            <input th:field="*{title}" th:errorclass="input-error" type="text" class="input" />
