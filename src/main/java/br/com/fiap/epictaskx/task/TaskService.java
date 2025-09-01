@@ -1,6 +1,7 @@
 package br.com.fiap.epictaskx.task;
 
 import br.com.fiap.epictaskx.helper.MessageHelper;
+import br.com.fiap.epictaskx.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,11 +31,40 @@ public class TaskService {
     }
 
     public void deleteById(Long id) {
+        taskRepository.delete(getTask(id));
+    }
 
-        if (!taskRepository.existsById(id)){
-            var message = messageSource.getMessage("task.notfound", null, LocaleContextHolder.getLocale());
-            throw new EntityNotFoundException(messageHelper.getMessage("task.notfound"));
-        }
-        taskRepository.deleteById(id);
+    public void pickTask(Long id, User user) {
+        var task = getTask(id);
+        task.setUser(user);
+        taskRepository.save(task);
+    }
+
+    public void dropTask(Long id, User user) {
+        var task = getTask(id);
+        task.setUser(null);
+        taskRepository.save(task);
+    }
+
+    public void incrementTaskStatus(Long id, User user) {
+        var task = getTask(id);
+        task.setStatus(task.getStatus() + 10);
+        if (task.getStatus() > 100) task.setStatus(100);
+
+        taskRepository.save(task);
+    }
+
+    public void decrementTaskStatus(Long id, User user) {
+        var task = getTask(id);
+        task.setStatus(task.getStatus() - 10);
+        if (task.getStatus() < 0) task.setStatus(0);
+
+        taskRepository.save(task);
+    }
+
+    private Task getTask(Long id) {
+        return taskRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(messageHelper.getMessage("task.notfound"))
+        );
     }
 }
