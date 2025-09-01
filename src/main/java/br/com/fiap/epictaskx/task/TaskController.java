@@ -1,5 +1,6 @@
 package br.com.fiap.epictaskx.task;
 
+import br.com.fiap.epictaskx.helper.MessageHelper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class TaskController {
 
     private final TaskService taskService;
     private final MessageSource messageSource;
+    private final MessageHelper messageHelper;
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal OAuth2User user){
@@ -45,8 +45,14 @@ public class TaskController {
     public String create(@Valid Task task, BindingResult result, RedirectAttributes redirect){ //TODO DTO
         if(result.hasErrors()) return "form";
         taskService.save(task);
-        var message = messageSource.getMessage("task.save.success", null, LocaleContextHolder.getLocale());
-        redirect.addFlashAttribute("message", message);
+        redirect.addFlashAttribute("message", messageHelper.getMessage("task.save.success"));
+        return "redirect:/task";
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable Long id, RedirectAttributes redirect){
+        taskService.deleteById(id);
+        redirect.addFlashAttribute("message", messageHelper.getMessage("task.delete.success"));
         return "redirect:/task";
     }
 
