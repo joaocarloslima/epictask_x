@@ -21,6 +21,8 @@ public class User {
 
     private String avatarUrl;
 
+    private int score = 0;
+
     public User(OAuth2User principal) {
         this.email = principal.getAttributes().get("email").toString();
         this.name = principal.getAttributes().get("name").toString();
