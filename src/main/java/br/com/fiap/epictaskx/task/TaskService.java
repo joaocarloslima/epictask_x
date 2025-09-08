@@ -42,6 +42,9 @@ public class TaskService {
 
     public void dropTask(Long id, User user) {
         var task = getTask(id);
+        if(!task.getUser().equals(user)){
+            throw new IllegalStateException(messageHelper.getMessage("task.notowner"));
+        }
         task.setUser(null);
         taskRepository.save(task);
     }
